@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trafoinf V1.6.4 Final</title>
+    
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        .input-group { background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .label-text { font-size: 11px; font-weight: 800; color: #1e40af; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .input-style { width: 100%; border: none; border-bottom: 2px solid #e2e8f0; padding: 8px 0; font-size: 16px; outline: none; transition: border-color 0.3s; background: transparent; }
+        .input-style:focus { border-bottom-color: #2563eb; }
+        
+        #capture-area { position: absolute; left: -9999px; width: 700px; background: white; padding: 0; color: #000; }
+        
+        .preview-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 2px dashed #cbd5e1; }
+        .btn-primary { background-color: #1e3a8a; color: white; padding: 16px; border-radius: 16px; font-weight: 900; width: 100%; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .btn-primary:active { transform: scale(0.98); }
+        .preserve-breaks { white-space: pre-line; }
+    </style>
+</head>
+<body class="p-4 pb-24">
+
+    <div class="max-w-md mx-auto">
+        <div class="bg-blue-900 p-6 rounded-3xl shadow-xl mb-6 flex items-center justify-between border-b-4 border-yellow-400">
+            <div>
+                <h1 class="text-white font-black text-2xl italic tracking-tighter">TRAFOINF V1.6.4</h1>
+                <p class="text-blue-300 text-[10px] font-bold tracking-widest uppercase">Inspectoría Técnica</p>
+            </div>
+            <div class="bg-yellow-400 p-3 rounded-2xl shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <span class="label-text">Ubicación / Ciudad</span>
+            <input type="text" id="ciudad" class="input-style" placeholder="Ej. Valledupar">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="input-group">
+                <span class="label-text">Fecha Técnica</span>
+                <input type="date" id="fecha" class="input-style">
+            </div>
+            <div class="input-group">
+                <span class="label-text">Lectura Actual</span>
+                <input type="text" id="lectura" class="input-style" placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <span class="label-text">Acción Técnica / MT</span>
+            <input type="text" id="accion" class="input-style" placeholder="Acción realizada">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="input-group">
+                <span class="label-text">Tipo de Red</span>
+                <input type="text" id="red" class="input-style" placeholder="Ej. Abierta">
+            </div>
+            <div class="input-group">
+                <span class="label-text">Tipología de Fraudes</span>
+                <textarea id="fraudes" class="input-style h-12 resize-none" placeholder="Descripción de tipologías (Enter para nueva línea)"></textarea>
+            </div>
+        </div>
+
+        <div class="input-group border-l-4 border-green-500">
+            <span class="label-text text-green-700">Amarre Hijos</span>
+            <div class="grid grid-cols-2 gap-4">
+                <input type="number" id="hijos_antes" class="input-style" placeholder="Antes">
+                <input type="number" id="hijos_despues" class="input-style" placeholder="Después">
+            </div>
+        </div>
+
+        <div class="input-group border-l-4 border-red-500">
+            <span class="label-text text-red-700">Posibles HV</span>
+            <input type="text" id="posibles_hv" class="input-style" placeholder="Números HV">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="input-group">
+                <span class="label-text">% Pérdidas</span>
+                <input type="number" id="perdida" class="input-style" placeholder="0">
+            </div>
+            <div class="input-group">
+                <span class="label-text">Estado TR</span>
+                <select id="condiciones" class="input-style">
+                    <option value="Óptimo">Óptimo</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Crítico">Crítico</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <span class="label-text text-blue-600">Foto de Evidencia</span>
+            <input type="file" id="foto_input" accept="image/*" class="hidden" onchange="previewFoto(event)">
+            <button onclick="document.getElementById('foto_input').click()" class="w-full bg-blue-50 border-2 border-blue-100 text-blue-700 py-3 rounded-xl font-bold">
+                📷 ADJUNTAR IMAGEN
+            </button>
+            <img id="img_preview" class="preview-img hidden" src="" alt="Vista previa">
+        </div>
+
+        <div class="input-group">
+            <div class="flex justify-between items-center mb-2">
+                <span class="label-text">Ingreso de NICs</span>
+                <span id="count-label" class="text-[9px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">0 NICs</span>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+                <textarea id="nic_val" class="input-style text-sm h-12 bg-gray-50 px-2" placeholder="Ej: 123456, 789101 (Masivo permitido)"></textarea>
+                
+                <div class="flex gap-2">
+                    <select id="nic_act" class="flex-1 p-2 rounded border bg-white text-xs font-bold" onchange="checkMotivo()">
+                        <option value="Anexado a MT">ANEXAR AL MT</option>
+                        <option value="Eliminado">ELIMINAR</option>
+                    </select>
+                    <button onclick="addNic()" class="bg-blue-900 text-white px-6 rounded-xl font-black text-xs">AÑADIR</button>
+                </div>
+                
+                <div id="motivo_box" class="hidden animate-pulse">
+                    <input type="text" id="motivo_val" class="input-style border-red-300 text-red-600" placeholder="¿Motivo de eliminación?">
+                </div>
+            </div>
+            
+            <div id="lista_nics" class="mt-4 space-y-1 max-h-40 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="input-group">
+            <span class="label-text">Observaciones</span>
+            <textarea id="nota" class="input-style h-20 resize-none" placeholder="Notas adicionales..."></textarea>
+        </div>
+
+        <div class="input-group border-b-4 border-blue-900 bg-blue-50">
+            <span class="label-text text-blue-900">Nombre del Técnico Inspector</span>
+            <input type="text" id="nombre_tecnico" class="input-style font-bold text-blue-900" placeholder="Nombre completo">
+        </div>
+
+        <button onclick="generarReporte()" class="btn-primary mt-4">
+            GENERAR INFORME V1.6.4
+        </button>
+
+        <div id="resultado" class="mt-8 pb-32 text-center"></div>
+    </div>
+
+    <div id="capture-area">
+        <div style="background:#1e3a8a; padding:30px; color:white; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h1 style="margin:0; font-size:26px; font-weight:900; letter-spacing:-1px;">INFORME TÉCNICO DE INSPECCIÓN</h1>
+                <p style="margin:0; opacity:0.8; font-weight:bold; font-size:12px;" id="rep_fecha_text"></p>
+            </div>
+            <div style="text-align:right;">
+                <p style="margin:0; font-size:16px; font-weight:bold; color:#fbbf24;">V1.6.4</p>
+                <p style="margin:0; font-size:10px; opacity:0.7;">APPOVEDA SISTEMAS</p>
+            </div>
+        </div>
+
+        <div style="padding:40px; background:white;">
+            <div id="rep_grid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:15px; margin-bottom:25px; background:#f8fafc; padding:15px; border-radius:10px;"></div>
+            
+            <div style="margin-bottom:25px; background:#fff7ed; border-left:4px solid #f97316; padding:12px; border-radius:4px;">
+                <h3 style="margin:0 0 5px 0; font-size:10px; color:#c2410c; font-weight:900; text-transform:uppercase;">Tipología de Fraudes</h3>
+                <p id="rep_fraudes" class="preserve-breaks" style="margin:0; font-size:13px; font-weight:700; color:#431407;"></p>
+            </div>
+
+            <div id="rep_foto_container" style="margin-bottom:25px; display:none; text-align:center;">
+                <img id="rep_foto_img" style="width:100%; border-radius:12px; border:2px solid #e2e8f0; max-height:400px; object-fit:contain;">
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:25px;">
+                <div style="background:#f0fdf4; padding:15px; border-radius:12px; border:1px solid #bbf7d0;">
+                    <h3 style="margin:0 0 10px 0; font-size:12px; color:#166534; font-weight:900; text-transform:uppercase;">Nics Anexados al MT</h3>
+                    <div id="rep_nics_anexados" style="font-size:12px; color:#14532d; font-weight:600; line-height:1.6;"></div>
+                </div>
+                <div style="background:#fef2f2; padding:15px; border-radius:12px; border:1px solid #fecaca;">
+                    <h3 style="margin:0 0 10px 0; font-size:12px; color:#991b1b; font-weight:900; text-transform:uppercase;">Nics Eliminados</h3>
+                    <div id="rep_nics_eliminados" style="font-size:12px; color:#7f1d1d; font-weight:600; line-height:1.6;"></div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:25px; background:#f1f5f9; padding:15px; border-radius:10px;">
+                <div><span style="font-size:10px; font-weight:bold; color:#475569;">AMARRE HIJOS:</span><br><b style="font-size:14px;">A: <span id="rep_h_a"></span> | D: <span id="rep_h_d"></span></b></div>
+                <div><span style="font-size:10px; font-weight:bold; color:#475569;">POSIBLES HV:</span><br><b id="rep_hv_val" style="font-size:14px; color:#dc2626;"></b></div>
+            </div>
+
+            <div style="margin-bottom:25px;">
+                <h3 style="font-size:11px; color:#1e3a8a; border-bottom:2px solid #1e3a8a; font-weight:900; margin-bottom:8px; padding-bottom:3px; text-transform:uppercase;">Observaciones del Inspector</h3>
+                <p id="rep_nota" style="font-size:13px; line-height:1.4; margin:0; color:#334155; min-height:40px;"></p>
+            </div>
+
+            <div style="margin-top:50px; padding-top:20px; border-top:2px solid #1e3a8a; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <p style="margin:0; font-size:10px; color:#64748b; font-weight:bold;">TÉCNICO INSPECTOR RESPONSABLE:</p>
+                    <p id="rep_tecnico" style="margin:0; font-size:18px; font-weight:900; color:#1e3a8a;"></p>
+                </div>
+                <div style="text-align:right;">
+                    <div style="width:120px; height:60px; border-bottom:1px solid #cbd5e1; margin-bottom:5px;"></div>
+                    <p style="margin:0; font-size:9px; color:#94a3b8; font-weight:bold;">FIRMA AUTORIZADA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // REGISTRO DE PWA (OBLIGATORIO)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log("SW no registrado", err));
+        }
+
+        let nics = [];
+        let base64Foto = "";
+
+        function previewFoto(e) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                document.getElementById('img_preview').src = reader.result;
+                document.getElementById('img_preview').classList.remove('hidden');
+                base64Foto = reader.result;
+            };
+            if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function checkMotivo() {
+            const isEliminado = document.getElementById('nic_act').value === 'Eliminado';
+            document.getElementById('motivo_box').classList.toggle('hidden', !isEliminado);
+            if(isEliminado) document.getElementById('motivo_val').focus();
+        }
+
+        function addNic() {
+            const inputRaw = document.getElementById('nic_val').value;
+            const act = document.getElementById('nic_act').value;
+            const mot = document.getElementById('motivo_val').value;
+            if(!inputRaw.trim()) return;
+            const nicsArray = inputRaw.split(/[\s,]+/).filter(n => n.trim() !== "");
+            nicsArray.forEach(num => {
+                nics.push({ num, act, mot: act === 'Eliminado' ? (mot || 'No especificado') : '' });
+            });
+            document.getElementById('nic_val').value = '';
+            document.getElementById('motivo_val').value = '';
+            document.getElementById('count-label').innerText = nics.length + " NICs";
+            renderNics();
+        }
+
+        function renderNics() {
+            document.getElementById('lista_nics').innerHTML = nics.map((n, i) => `
+                <div class="flex justify-between items-center p-2 rounded-lg border text-[11px] ${n.act === 'Eliminado' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-green-50 border-green-200 text-green-700'}">
+                    <div class="truncate pr-2">
+                        <b>${n.num}</b> - <span class="uppercase font-black">${n.act}</span>
+                        ${n.mot ? `<br><span class="text-[9px] italic opacity-80">Motivo: ${n.mot}</span>` : ''}
+                    </div>
+                    <button onclick="nics.splice(${i},1);renderNics();" class="bg-white/50 rounded-full w-5 h-5 flex items-center justify-center font-bold">×</button>
+                </div>
+            `).reverse().join('');
+        }
+
+        function generarReporte() {
+            const res = document.getElementById('resultado');
+            res.innerHTML = "<div class='flex flex-col items-center p-4'><div class='w-10 h-10 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mb-2'></div><p class='font-bold text-blue-900'>MAQUETANDO INFORME FINAL...</p></div>";
+            const now = new Date();
+            document.getElementById('rep_fecha_text').innerText = "REGISTRO: " + now.toLocaleDateString() + " | " + now.toLocaleTimeString();
+            const datos = [
+                ["CIUDAD", document.getElementById('ciudad').value],
+                ["FECHA", document.getElementById('fecha').value],
+                ["LECTURA", document.getElementById('lectura').value],
+                ["ACCIÓN", document.getElementById('accion').value],
+                ["RED", document.getElementById('red').value],
+                ["ESTADO", document.getElementById('condiciones').value],
+                ["% PÉR.", (document.getElementById('perdida').value || '0') + "%"]
+            ];
+            document.getElementById('rep_grid').innerHTML = datos.map(d => `<div><p style="margin:0; font-size:8px; color:#64748b; font-weight:bold; text-transform:uppercase;">${d[0]}</p><p style="margin:0; font-size:11px; font-weight:800; color:#1e293b;">${d[1] || '---'}</p></div>`).join('');
+            document.getElementById('rep_fraudes').innerText = document.getElementById('fraudes').value || "NO REGISTRA";
+            document.getElementById('rep_h_a').innerText = document.getElementById('hijos_antes').value || "0";
+            document.getElementById('rep_h_d').innerText = document.getElementById('hijos_despues').value || "0";
+            document.getElementById('rep_hv_val').innerText = document.getElementById('posibles_hv').value || "NINGUNO";
+            document.getElementById('rep_nota').innerText = document.getElementById('nota').value || "Sin observaciones registradas por el técnico.";
+            document.getElementById('rep_tecnico').innerText = (document.getElementById('nombre_tecnico').value || "NO ESPECIFICADO").toUpperCase();
+            const anexadosHtml = nics.filter(n => n.act !== 'Eliminado').map(n => `• ${n.num}`).join('<br>') || "Ninguno";
+            const eliminadosHtml = nics.filter(n => n.act === 'Eliminado').map(n => `• ${n.num} (${n.mot})`).join('<br>') || "Ninguno";
+            document.getElementById('rep_nics_anexados').innerHTML = anexadosHtml;
+            document.getElementById('rep_nics_eliminados').innerHTML = eliminadosHtml;
+            if(base64Foto) {
+                document.getElementById('rep_foto_img').src = base64Foto;
+                document.getElementById('rep_foto_container').style.display = 'block';
+            } else {
+                document.getElementById('rep_foto_container').style.display = 'none';
+            }
+            setTimeout(() => {
+                html2canvas(document.getElementById('capture-area'), { scale: 2, useCORS: true }).then(canvas => {
+                    const dataUrl = canvas.toDataURL("image/png");
+                    res.innerHTML = `
+                        <div class="bg-white p-6 rounded-3xl shadow-2xl border-t-8 border-blue-900 animate-in fade-in zoom-in duration-300">
+                            <h2 class="text-blue-900 font-black mb-4">INFORME GENERADO CORRECTAMENTE</h2>
+                            <img src="${dataUrl}" class="w-full rounded-xl border mb-6">
+                            <button id="downloadBtn" class="w-full bg-green-600 text-white p-4 rounded-2xl font-black shadow-lg">⬇️ DESCARGAR PNG</button>
+                        </div>
+                    `;
+                    document.getElementById('downloadBtn').onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = dataUrl;
+                        a.download = `INFORME_V1.6.4_${Date.now()}.png`;
+                        a.click();
+                    };
+                    res.scrollIntoView({behavior: 'smooth'});
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "TRAFOINF V1.6.4",
+  "short_name": "Trafoinf",
+  "description": "Sistema de Inspectoría Técnica",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/355/355980.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
